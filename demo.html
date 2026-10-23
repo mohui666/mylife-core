@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>mylife-core · 人生图谱</title>
+<style>
+:root{color-scheme:dark;--bg:#111217;--side:#17181e;--panel:#1b1c23;--line:#2c2d37;--text:#e5e5ec;--muted:#9697a8;--accent:#b6a3ee;--soft:#292637;--person:#bca0f5;--project:#87b4ec;--course:#83c1a1;--topic:#d3b67f;--work:#d99bb3;--record:#9fa8bc}
+*{box-sizing:border-box}html,body{margin:0;height:100%;font:14px/1.65 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--text);background:var(--bg)}button,input{font:inherit;color:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}button{border:0}a{color:var(--accent)}.app{height:100dvh;display:grid;grid-template-columns:235px minmax(300px,1fr) 350px;overflow:hidden}.sidebar{background:var(--side);border-right:1px solid var(--line);padding:25px 18px;display:flex;flex-direction:column;min-height:0}.brand{font-size:23px;font-weight:600;letter-spacing:-.7px}.brand small{font-size:12px;font-weight:400;letter-spacing:0;color:var(--muted);display:block;margin:1px 0 22px}.search{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:8px 10px;outline:none}.search:focus{border-color:var(--accent)}.note-list{overflow:auto;margin:17px -7px 0;padding:0 7px;flex:1;scrollbar-width:thin}.group-title{margin:19px 7px 6px;font-size:11px;letter-spacing:1px;color:var(--muted)}.note-item{display:flex;align-items:center;gap:9px;width:100%;padding:7px 9px;border-radius:5px;background:transparent;text-align:left;line-height:1.5}.note-item:hover{background:var(--panel)}.note-item.active{background:var(--soft);color:var(--accent)}.dot{width:6px;height:6px;border-radius:50%;flex:none;background:var(--muted)}.sidebar-foot{font-size:11px;color:var(--muted);padding:17px 7px 0}.graph-pane{position:relative;min-width:0;overflow:hidden}.graph-heading{position:absolute;left:25px;top:24px;pointer-events:none;z-index:1}.eyebrow{color:var(--muted);font-size:11px;letter-spacing:1.5px}.graph-heading h1{margin:4px 0 3px;font-size:18px;font-weight:500}.graph-count{font-size:12px;color:var(--muted)}canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}canvas:active{cursor:grabbing}.legend{position:absolute;bottom:22px;left:24px;right:115px;display:flex;gap:12px;flex-wrap:wrap;pointer-events:none;font-size:11px;color:var(--muted)}.legend span{display:flex;align-items:center;gap:6px}.tools{position:absolute;right:20px;bottom:19px;display:flex;gap:3px;background:var(--side);border:1px solid var(--line);padding:3px;border-radius:7px}.tools button{background:transparent;border-radius:4px;min-width:27px;height:28px;color:var(--muted)}.tools button:hover{color:var(--text);background:var(--panel)}.reader{border-left:1px solid var(--line);background:var(--side);overflow-y:auto;padding:26px 27px;scrollbar-width:thin}.reader-type{font-size:11px;letter-spacing:1px;color:var(--muted);display:flex;align-items:center;gap:7px}.reader h1{font-size:24px;line-height:1.4;margin:13px 0 22px;font-weight:600;letter-spacing:-.4px;overflow-wrap:anywhere}.reader h2{font-size:15px;font-weight:500;margin:26px 0 9px}.reader h3{font-size:14px;font-weight:500;margin:21px 0 8px}.reader p{margin:10px 0}.reader ul{padding-left:20px;margin:10px 0}.reader li{margin:6px 0}.reader blockquote{margin:12px 0;padding:0 0 0 13px;border-left:2px solid var(--line);color:var(--muted)}.reader strong{font-weight:600}.reader code{background:var(--panel);padding:1px 4px;border-radius:3px;font-size:12px}.wiki{display:inline;padding:0;background:transparent;color:var(--accent);text-align:left;line-height:inherit;border-radius:2px}.wiki:hover{text-decoration:underline}.tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:18px;color:var(--muted);font-size:11px}.tag{border:1px solid var(--line);padding:1px 6px;border-radius:4px}.related{border-top:1px solid var(--line);margin-top:28px;padding-top:15px}.related-label{font-size:11px;letter-spacing:1px;color:var(--muted);margin-bottom:10px}.related-item{display:block;width:100%;background:transparent;text-align:left;color:var(--accent);padding:4px 0}.empty{color:var(--muted);font-size:13px;padding:15px 7px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.mobile-name{display:none}.hint{position:absolute;left:25px;top:106px;color:var(--muted);font-size:11px;pointer-events:none}
+@media(prefers-color-scheme:light){:root{color-scheme:light;--bg:#faf9fc;--side:#f2f1f6;--panel:#e9e8ef;--line:#dedce6;--text:#282631;--muted:#77717f;--accent:#7956af;--soft:#e7e0f1;--person:#9267c5;--project:#5b86b7;--course:#50866c;--topic:#a38449;--work:#ad728b;--record:#7c8398}}
+@media(max-width:1120px){.app{grid-template-columns:200px minmax(250px,1fr) 300px}.reader{padding:24px 21px}.sidebar{padding:22px 13px}}
+@media(max-width:820px){.app{grid-template-columns:minmax(0,1fr) 300px}.sidebar{display:none}.graph-heading{left:20px;top:20px}.mobile-name{display:block;margin-bottom:5px;font-size:11px;color:var(--accent)}}
+@media(max-width:600px){.app{height:auto;min-height:100dvh;grid-template-columns:1fr;overflow:auto}.graph-pane{height:58dvh;min-height:350px}.reader{border-left:0;border-top:1px solid var(--line);overflow:visible;min-height:42dvh;padding:23px}.graph-heading h1{font-size:17px}.legend{bottom:20px;gap:9px;right:110px}.hint{top:116px}.reader h1{font-size:23px}}
+.legend{right:155px}.tools button[aria-pressed="true"]{color:var(--accent);background:var(--soft)}
+:root{--idea:var(--topic);--life:#7bbab6}@media(prefers-color-scheme:light){:root{--life:#387d79}}
+@media(max-width:820px){.hint{top:124px}}
+.app[hidden],.entry-message[hidden]{display:none}.entry-message{max-width:480px;margin:15vh auto;padding:30px;background:var(--side);border:1px solid var(--line);border-radius:12px}.entry-message h1{margin:4px 0 12px;font-size:23px}.entry-message p{color:var(--muted)}.entry-message a{display:inline-block;margin-top:10px;padding:9px 16px;border:1px solid var(--accent);border-radius:7px;text-decoration:none}.entry-message a:hover{background:var(--soft)}@media(max-width:540px){.entry-message{margin:10vh 20px}}
+.demo-notice{font-size:11px;color:var(--accent);background:var(--soft);padding:7px 10px;border-radius:5px;margin:0 0 18px}.demo-notice[hidden]{display:none}
+</style>
+</head>
+<body>
+<section id="entry-message" class="entry-message" hidden aria-label="打开图谱">
+  <div class="eyebrow">mylife-core</div>
+  <h1>打开我的人生图谱</h1>
+  <p>这里是界面模板。打开虚构演示查看球形图谱。</p>
+  <a href="../demo.html">打开虚构演示</a>
+</section>
+<div class="app">
+  <aside class="sidebar" aria-label="笔记导航">
+    <div class="brand"><span id="brand-title">mylife-core</span><small id="brand-description">记录个人经历与变化。</small></div>
+    <label class="sr-only" for="search">搜索笔记</label>
+    <input id="search" class="search" type="search" placeholder="搜索我的笔记…" autocomplete="off">
+    <nav id="note-list" class="note-list" aria-label="知识库笔记"></nav>
+    <div id="updated" class="sidebar-foot"></div>
+  </aside>
+  <main class="graph-pane" aria-label="人生知识图谱">
+    <div class="graph-heading"><span id="mobile-name" class="mobile-name">mylife-core</span><div class="eyebrow">CONNECTIONS</div><h1>人生知识图谱</h1><div id="graph-count" class="graph-count"></div></div>
+    <div class="hint">拖动旋转 · 滚轮缩放 · 点击节点阅读</div>
+    <canvas id="graph" role="img" aria-label="球形人生图谱，颜色与球面分区表示生活领域。拖动或按方向键旋转，加减键缩放，空格切换自动旋转，0 键复位。点击节点或通过左侧分类导航阅读笔记。" tabindex="0"></canvas>
+    <div id="legend" class="legend"></div>
+    <div class="tools" aria-label="图谱视图">
+      <button id="auto-rotate" type="button" aria-label="暂停自动旋转" aria-pressed="true" title="暂停自动旋转">Ⅱ</button>
+      <button id="zoom-out" type="button" aria-label="缩小">−</button>
+      <button id="zoom-in" type="button" aria-label="放大">＋</button>
+      <button id="fit" type="button" aria-label="重置球形视图" title="重置球形视图">全</button>
+    </div>
+  </main>
+  <article class="reader" aria-live="polite" aria-label="当前笔记">
+    <p id="demo-notice" class="demo-notice" hidden>演示资料全部虚构，人物与经历均为示例。</p>
+    <div id="reader-type" class="reader-type"></div>
+    <h1 id="reader-title"></h1>
+    <div id="reader-body"></div>
+    <div id="tags" class="tags"></div>
+    <div class="related"><div class="related-label">关联笔记</div><nav id="related" aria-label="关联笔记"></nav></div>
+  </article>
+</div>
+<script>
+const DATA = {"title":"mylife-core","description":"虚构示例 · 六领域个人档案","profileId":"人物/林澄","isDemo":true,"domains":["个人背景","想法与偏好","生活与关系","学习与成长","项目与实践","阅读与创作","档案入口"],"updated":"2030-04-17","notes":[{"id":"了解我","file":"了解我.md","title":"了解我","type":"索引","domain":"档案入口","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 了解我\n\n这是一个完整虚构的演示档案，人物入口是 [[人物/林澄]]。\n\n示例围绕手工学习、生活安排、植物照料和阅读创作展开。同一个对象只有一篇正文，领域页面负责导航。\n\n最近情况见 [[当前状态]]，变化见 [[经历时间线]]。","links":["人物/林澄","当前状态","经历时间线"]},{"id":"人物/林澄","file":"人物/林澄.md","title":"林澄（虚构示例）","type":"人物","domain":"个人背景","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 林澄（虚构示例）\n\n本页人物与全部经历均为虚构，用来展示个人档案的组织方法。\n\n在示例设定中，林澄喜欢手工、阅读与照顾植物，正在尝试让周末安排更从容。这些只是虚构人物设定。\n\n继续浏览：[[领域/想法与偏好]]、[[领域/生活与关系]]、[[领域/学习与成长]]、[[领域/项目与实践]]、[[领域/阅读与创作]]、[[当前状态]]。","links":["领域/想法与偏好","领域/生活与关系","领域/学习与成长","领域/项目与实践","领域/阅读与创作","当前状态"]},{"id":"作品/雨后的小城","file":"作品/雨后的小城.md","title":"雨后的小城","type":"作品","domain":"阅读与创作","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 雨后的小城\n\n2030-04-16，完成一篇虚构短文的第一稿。希望保留更多自然景物的细节，这次要求只适用于该短文。\n\n当晚决定暂停修改，之后是否恢复尚未记录。整理档案不代表重新启动创作任务。\n\n关联：[[领域/阅读与创作]]、[[想法/选择与偏好]]、[[当前状态]]。","links":["领域/阅读与创作","想法/选择与偏好","当前状态"]},{"id":"学习/练习计划","file":"学习/练习计划.md","title":"练习计划","type":"记录","domain":"学习与成长","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 练习计划\n\n2030-04-11，虚构人物希望通过少量但持续的手工练习了解自己的兴趣，先尝试再决定是否长期投入。\n\n目前希望每次只练一小段时间，并保留个人感受。实际已完成多少次练习尚未记录。\n\n关联：[[领域/学习与成长]]、[[课程/陶艺入门]]。","links":["领域/学习与成长","课程/陶艺入门"]},{"id":"当前状态","file":"当前状态.md","title":"当前状态","type":"状态","domain":"档案入口","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 当前状态\n\n示例截止日期：2030-04-17。以下情况全部虚构。\n\n- [[课程/陶艺入门]]：完成第一次体验，后续是否报名尚未决定。\n- [[项目/阳台花园]]：两盆香草已放到阳台，观察记录继续保留。\n- [[项目/社区书架]]：初步摆放已完成，书目卡片尚未做完。\n- [[作品/雨后的小城]]：第一稿完成，暂时搁置修改。\n\n过往变化见 [[经历时间线]]，未知情况见 [[待了解与待确认]]。","links":["课程/陶艺入门","项目/阳台花园","项目/社区书架","作品/雨后的小城","经历时间线","待了解与待确认"]},{"id":"待了解与待确认","file":"待了解与待确认.md","title":"待了解与待确认","type":"索引","domain":"档案入口","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 待了解与待确认\n\n本页问题仅为虚构演示。\n\n- [[课程/陶艺入门]]：是否继续参加正式课程？\n- [[项目/社区书架]]：后续由谁负责维护，目前没有明确记录。\n- [[阅读/纸页漫步]]：读完后的整体感受尚未记录。\n\n关联：[[当前状态]]。","links":["课程/陶艺入门","项目/社区书架","阅读/纸页漫步","当前状态"]},{"id":"想法/近期关注","file":"想法/近期关注.md","title":"近期关注","type":"记录","domain":"想法与偏好","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 近期关注\n\n2030-04-14，在虚构讨论中询问过步行旅行与观鸟，希望先了解活动安排。尚未决定报名，也没有形成长期兴趣结论。\n\n关联：[[领域/想法与偏好]]。","links":["领域/想法与偏好"]},{"id":"想法/选择与偏好","file":"想法/选择与偏好.md","title":"选择与偏好","type":"偏好","domain":"想法与偏好","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 选择与偏好\n\n2030-04-12，在虚构的周末安排讨论中表示，希望一次只安排一件需要集中精力的事情。\n\n做 [[作品/雨后的小城]] 这一篇短文时，希望保留更多自然景物的细节；这条要求仅用于该作品，不能扩展为所有写作的固定规则。\n\n关联：[[领域/想法与偏好]]、[[记录/2030/2030-04-12-改变安排]]。","links":["作品/雨后的小城","领域/想法与偏好","记录/2030/2030-04-12-改变安排"]},{"id":"生活/日常节奏","file":"生活/日常节奏.md","title":"日常节奏","type":"记录","domain":"生活与关系","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 日常节奏\n\n2030-04-12，虚构人物决定尝试在周末保留一个不安排任务的下午。\n\n这是当时的新安排，不代表之后每周都已经执行；后续变化应补充实际发生日期。\n\n关联：[[领域/生活与关系]]、[[记录/2030/2030-04-12-改变安排]]。","links":["领域/生活与关系","记录/2030/2030-04-12-改变安排"]},{"id":"生活/生活空间","file":"生活/生活空间.md","title":"生活空间","type":"记录","domain":"生活与关系","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 生活空间\n\n虚构环境中有一处采光较好的小阳台，最近开始留出位置照顾两盆香草。\n\n有关行动和进展集中在 [[项目/阳台花园]]，这里不重复维护项目经过。\n\n关联：[[领域/生活与关系]]。","links":["项目/阳台花园","领域/生活与关系"]},{"id":"经历时间线","file":"经历时间线.md","title":"经历时间线","type":"记录","domain":"档案入口","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 经历时间线\n\n所有日期和事件为虚构示例，示例统一采用 UTC+8。\n\n- 2030-04-10：开始规划 [[项目/阳台花园]]。\n- 2030-04-12：决定为周末留出空白，见 [[记录/2030/2030-04-12-改变安排]]。\n- 2030-04-13：参加 [[课程/陶艺入门]] 第一次体验。\n- 2030-04-15：参与摆放 [[项目/社区书架]]。\n- 2030-04-16：完成 [[作品/雨后的小城]] 第一稿，随后暂停修改。\n\n最近有效情况见 [[当前状态]]。","links":["项目/阳台花园","记录/2030/2030-04-12-改变安排","课程/陶艺入门","项目/社区书架","作品/雨后的小城","当前状态"]},{"id":"记录/2030/2030-04-12-改变安排","file":"记录/2030/2030-04-12-改变安排.md","title":"改变安排","type":"记录","domain":"想法与偏好","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 改变安排\n\n事件日期：2030-04-12，UTC+8。全部内容为虚构示例。\n\n原先想在一天内安排多件事，后来表达希望给周末留一点空白，于是决定先尝试一个不安排任务的下午。\n\n这是一项当时的选择，不直接定义为永久的性格特征。后续是否持续执行留待新的记录。\n\n关联：[[领域/想法与偏好]]、[[生活/日常节奏]]、[[经历时间线]]。","links":["领域/想法与偏好","生活/日常节奏","经历时间线"]},{"id":"课程/陶艺入门","file":"课程/陶艺入门.md","title":"陶艺入门","type":"课程","domain":"学习与成长","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 陶艺入门\n\n2030-04-13，参加了一次虚构的陶艺体验，完成一件简单器物。没有据此认定已经掌握陶艺。\n\n课程结束后表示喜欢手作过程，但是否正式报名尚未决定。这里只记录学习经历，不保存陶艺知识点或操作教程。\n\n关联：[[领域/学习与成长]]、[[学习/练习计划]]、[[当前状态]]。","links":["领域/学习与成长","学习/练习计划","当前状态"]},{"id":"阅读/纸页漫步","file":"阅读/纸页漫步.md","title":"纸页漫步","type":"记录","domain":"阅读与创作","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 纸页漫步\n\n书名与阅读经历全部虚构。2030-04-17，记录读到第三章，喜欢其中平缓的叙述节奏。\n\n尚未读完整本，也没有全书评价。这里记录阅读过程和个人感受，不摘录书中知识。\n\n关联：[[领域/阅读与创作]]。","links":["领域/阅读与创作"]},{"id":"项目/社区书架","file":"项目/社区书架.md","title":"社区书架","type":"项目","domain":"项目与实践","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 社区书架\n\n2030-04-15，虚构人物参加共享书架的第一次整理，并完成初步摆放。书目卡片尚未制作完成。\n\n当前记录不能推出书架已经对外开放，也没有确认长期维护安排。\n\n关联：[[领域/项目与实践]]、[[领域/生活与关系]]、[[当前状态]]。","links":["领域/项目与实践","领域/生活与关系","当前状态"]},{"id":"项目/阳台花园","file":"项目/阳台花园.md","title":"阳台花园","type":"项目","domain":"项目与实践","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 阳台花园\n\n## 当前情况\n\n虚构示例截至 2030-04-17：两盆香草已经放到阳台，后续照料仍在观察。\n\n## 重要变化\n\n- 2030-04-10：提出小规模尝试的计划。\n- 2030-04-15：完成第一次摆放。\n- 2030-04-17：决定先观察已有植物，再考虑增加数量。\n\n关联：[[领域/项目与实践]]、[[生活/生活空间]]。","links":["领域/项目与实践","生活/生活空间"]},{"id":"领域/学习与成长","file":"领域/学习与成长.md","title":"学习与成长","type":"索引","domain":"学习与成长","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 学习与成长\n\n- [[学习/练习计划]]：目标与个人学习方式。\n- [[课程/陶艺入门]]：参加课程和练习的经历。\n\n关联：[[人物/林澄]]。","links":["学习/练习计划","课程/陶艺入门","人物/林澄"]},{"id":"领域/想法与偏好","file":"领域/想法与偏好.md","title":"想法与偏好","type":"索引","domain":"想法与偏好","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 想法与偏好\n\n- [[想法/选择与偏好]]：表达过的取舍与适用场景。\n- [[想法/近期关注]]：想了解但还没作出决定的事情。\n- [[记录/2030/2030-04-12-改变安排]]：调整周末安排的一次虚构反思。\n\n关联：[[人物/林澄]]。","links":["想法/选择与偏好","想法/近期关注","记录/2030/2030-04-12-改变安排","人物/林澄"]},{"id":"领域/生活与关系","file":"领域/生活与关系.md","title":"生活与关系","type":"索引","domain":"生活与关系","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 生活与关系\n\n- [[生活/日常节奏]]：最近愿意保留的日常安排。\n- [[生活/生活空间]]：虚构生活环境与习惯。\n\n关联：[[人物/林澄]]、[[项目/社区书架]]。","links":["生活/日常节奏","生活/生活空间","人物/林澄","项目/社区书架"]},{"id":"领域/阅读与创作","file":"领域/阅读与创作.md","title":"阅读与创作","type":"索引","domain":"阅读与创作","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 阅读与创作\n\n- [[作品/雨后的小城]]：一篇虚构短文的创作过程。\n- [[阅读/纸页漫步]]：虚构书籍的阅读进度与个人感受。\n\n关联：[[人物/林澄]]。","links":["作品/雨后的小城","阅读/纸页漫步","人物/林澄"]},{"id":"领域/项目与实践","file":"领域/项目与实践.md","title":"项目与实践","type":"索引","domain":"项目与实践","updated":"2030-04-17","tags":["虚构示例"],"fictional":true,"graph":true,"text":"# 项目与实践\n\n- [[项目/阳台花园]]：持续记录植物照料计划的进展。\n- [[项目/社区书架]]：参与共享书架的实践经历。\n\n关联：[[人物/林澄]]、[[领域/生活与关系]]。","links":["项目/阳台花园","项目/社区书架","人物/林澄","领域/生活与关系"]}],"nodeIds":["了解我","人物/林澄","作品/雨后的小城","学习/练习计划","当前状态","待了解与待确认","想法/近期关注","想法/选择与偏好","生活/日常节奏","生活/生活空间","经历时间线","记录/2030/2030-04-12-改变安排","课程/陶艺入门","阅读/纸页漫步","项目/社区书架","项目/阳台花园","领域/学习与成长","领域/想法与偏好","领域/生活与关系","领域/阅读与创作","领域/项目与实践"],"edges":[{"source":"了解我","target":"人物/林澄"},{"source":"了解我","target":"当前状态"},{"source":"了解我","target":"经历时间线"},{"source":"人物/林澄","target":"领域/想法与偏好"},{"source":"人物/林澄","target":"领域/生活与关系"},{"source":"人物/林澄","target":"领域/学习与成长"},{"source":"人物/林澄","target":"领域/项目与实践"},{"source":"人物/林澄","target":"领域/阅读与创作"},{"source":"人物/林澄","target":"当前状态"},{"source":"作品/雨后的小城","target":"领域/阅读与创作"},{"source":"作品/雨后的小城","target":"想法/选择与偏好"},{"source":"作品/雨后的小城","target":"当前状态"},{"source":"学习/练习计划","target":"领域/学习与成长"},{"source":"学习/练习计划","target":"课程/陶艺入门"},{"source":"当前状态","target":"课程/陶艺入门"},{"source":"当前状态","target":"项目/阳台花园"},{"source":"当前状态","target":"项目/社区书架"},{"source":"当前状态","target":"经历时间线"},{"source":"当前状态","target":"待了解与待确认"},{"source":"待了解与待确认","target":"课程/陶艺入门"},{"source":"待了解与待确认","target":"项目/社区书架"},{"source":"待了解与待确认","target":"阅读/纸页漫步"},{"source":"想法/近期关注","target":"领域/想法与偏好"},{"source":"想法/选择与偏好","target":"领域/想法与偏好"},{"source":"想法/选择与偏好","target":"记录/2030/2030-04-12-改变安排"},{"source":"生活/日常节奏","target":"领域/生活与关系"},{"source":"生活/日常节奏","target":"记录/2030/2030-04-12-改变安排"},{"source":"生活/生活空间","target":"项目/阳台花园"},{"source":"生活/生活空间","target":"领域/生活与关系"},{"source":"经历时间线","target":"项目/阳台花园"},{"source":"经历时间线","target":"记录/2030/2030-04-12-改变安排"},{"source":"经历时间线","target":"课程/陶艺入门"},{"source":"经历时间线","target":"项目/社区书架"},{"source":"经历时间线","target":"作品/雨后的小城"},{"source":"记录/2030/2030-04-12-改变安排","target":"领域/想法与偏好"},{"source":"课程/陶艺入门","target":"领域/学习与成长"},{"source":"阅读/纸页漫步","target":"领域/阅读与创作"},{"source":"项目/社区书架","target":"领域/项目与实践"},{"source":"项目/社区书架","target":"领域/生活与关系"},{"source":"项目/阳台花园","target":"领域/项目与实践"},{"source":"领域/项目与实践","target":"领域/生活与关系"}]};
+if (DATA === null) {
+  document.querySelector('.app').hidden=true;
+  document.getElementById('entry-message').hidden=false;
+} else {
+document.title=DATA.title+' · 人生图谱';
+document.getElementById('brand-title').textContent=DATA.title;
+document.getElementById('brand-description').textContent=DATA.description;
+document.getElementById('mobile-name').textContent=DATA.title;
+document.getElementById('demo-notice').hidden=!DATA.isDemo;
+const byId = new Map(DATA.notes.map(n => [n.id, n]));
+const colors = {'人物':'--person','项目':'--project','课程':'--course','作品':'--work','索引':'--record','状态':'--person','偏好':'--person','记录':'--record'};
+const domainColors = {'个人背景':'--person','想法与偏好':'--idea','生活与关系':'--life','学习与成长':'--course','项目与实践':'--project','阅读与创作':'--work','档案入口':'--record'};
+const groupNames = DATA.domains;
+const nodes = DATA.nodeIds.map(id => ({...byId.get(id), x:0,y:0,z:0}));
+const centerId=DATA.profileId||nodes.find(n=>n.type==='人物')?.id||nodes[0]?.id;
+const nodeById = new Map(nodes.map(n => [n.id,n]));
+const edges = DATA.edges.map(e => ({source:nodeById.get(e.source),target:nodeById.get(e.target)}));
+const adjacency = new Map(nodes.map(n => [n.id,new Set()]));
+for (const e of edges){adjacency.get(e.source.id).add(e.target.id);adjacency.get(e.target.id).add(e.source.id);}
+const canvas = document.getElementById('graph');
+const ctx = canvas.getContext('2d');
+const list = document.getElementById('note-list');
+const search = document.getElementById('search');
+const colorKey = value => typeof value==='string'?(domainColors[value]||colors[value]||'--record'):(domainColors[value.domain]||colors[value.type]||'--record');
+const getColor = value => getComputedStyle(document.documentElement).getPropertyValue(colorKey(value)).trim();
+const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
+let width=0,height=0,dpr=1,scale=1,center={x:0,y:0},radius=1,contentTop=130,yaw=-.38,pitch=.18,selected=centerId,hover=null,query='',pointer=null,inside=false,autoRotate=!reducedMotion.matches,raf=0,lastFrame=0;
+const shell=nodes.filter(n=>n.id!==centerId);
+const positions=[];
+for(let i=0;i<shell.length;i++){
+  const y=1-2*(i+.5)/shell.length,ring=Math.sqrt(1-y*y),angle=i*Math.PI*(3-Math.sqrt(5));
+  positions.push({x:Math.cos(angle)*ring,y,z:Math.sin(angle)*ring});
+}
+positions.sort((a,b)=>Math.atan2(a.x,a.z)-Math.atan2(b.x,b.z));
+const groupedShell=[...shell].sort((a,b)=>groupNames.indexOf(a.domain)-groupNames.indexOf(b.domain)||(a.type==='索引'?-1:0)-(b.type==='索引'?-1:0)||a.title.localeCompare(b.title,'zh-CN'));
+for(let i=0;i<groupedShell.length;i++)Object.assign(groupedShell[i],positions[i]);
+for(const n of nodes)n.radius=3.8+Math.min(3.5,Math.sqrt(adjacency.get(n.id).size)*.7);
+document.getElementById('graph-count').textContent=nodes.length+' 个节点 · '+edges.length+' 条关联';
+document.getElementById('updated').textContent='更新至 '+DATA.updated;
+const domainLabels={'个人背景':'背景','想法与偏好':'想法','生活与关系':'生活','学习与成长':'学习','项目与实践':'项目','阅读与创作':'创作','档案入口':'导航'};
+const legendTypes=groupNames.filter(domain=>nodes.some(n=>n.domain===domain)).map(domain=>[domain,domainLabels[domain]]);
+for(const [domain,label] of legendTypes){
+  const span=document.createElement('span'),dot=document.createElement('i');span.title=domain;dot.className='dot';dot.style.background=getColor(domain);span.append(dot,document.createTextNode(label));document.getElementById('legend').append(span);
+}
+function resolveNote(raw){
+  const id=raw.split('|')[0].split('#')[0].trim().replace(/\.md$/i,'');
+  if(!id&&raw.split('|')[0].includes('#'))return byId.get(selected);
+  return byId.get(id)||DATA.notes.find(n=>n.id.split('/').at(-1)===id);
+}
+function addInline(parent,text){
+  const expression=/\[\[([^\]\n]+)\]\]|\*\*([^*]+)\*\*|`([^`]+)`/g;let last=0;
+  for(const m of text.matchAll(expression)){
+    parent.append(document.createTextNode(text.slice(last,m.index)));
+    if(m[1]){
+      const note=resolveNote(m[1]),label=m[1].split('|')[1]||note?.title||m[1];
+      const button=document.createElement('button');button.type='button';button.className='wiki';button.textContent=label;
+      if(note)button.addEventListener('click',()=>selectNote(note.id,true));else button.disabled=true;
+      parent.append(button);
+    }else{const el=document.createElement(m[2]?'strong':'code');el.textContent=m[2]||m[3];parent.append(el);}
+    last=m.index+m[0].length;
+  }
+  parent.append(document.createTextNode(text.slice(last)));
+}
+function renderText(text){
+  const host=document.getElementById('reader-body');host.replaceChildren();
+  let paragraph=null,ul=null,firstTitle=true;
+  for(const line of text.split('\n')){
+    if(/^# /.test(line)&&firstTitle){firstTitle=false;continue;}
+    if(!line.trim()){paragraph=null;ul=null;continue;}
+    const heading=line.match(/^(#{1,3})\s+(.+)$/);
+    if(heading){const h=document.createElement(heading[1].length===1?'h2':'h'+heading[1].length);addInline(h,heading[2]);host.append(h);paragraph=null;ul=null;continue;}
+    if(/^- /.test(line)){
+      if(!ul){ul=document.createElement('ul');host.append(ul);}
+      const li=document.createElement('li');addInline(li,line.slice(2));ul.append(li);paragraph=null;continue;
+    }
+    ul=null;
+    if(/^> /.test(line)){const quote=document.createElement('blockquote');addInline(quote,line.slice(2));host.append(quote);paragraph=null;continue;}
+    if(!paragraph){paragraph=document.createElement('p');host.append(paragraph);}else paragraph.append(document.createTextNode(' '));
+    addInline(paragraph,line);
+  }
+}
+function matches(n){return !query||(n.title+' '+n.domain+' '+n.type+' '+n.tags.join(' ')+' '+n.text).toLocaleLowerCase().includes(query);}
+function renderList(){
+  list.replaceChildren();const filtered=nodes.filter(matches);
+  if(!filtered.length){const p=document.createElement('p');p.className='empty';p.textContent='暂时没有找到这条笔记。';list.append(p);}
+  for(const domain of groupNames){
+    const group=filtered.filter(n=>n.domain===domain).sort((a,b)=>(a.type==='索引'?-1:0)-(b.type==='索引'?-1:0)||a.title.localeCompare(b.title,'zh-CN'));if(!group.length)continue;
+    const heading=document.createElement('div');heading.className='group-title';heading.textContent=domain+' · '+group.length;list.append(heading);
+    for(const n of group){
+      const button=document.createElement('button');button.type='button';button.className='note-item'+(n.id===selected?' active':'');button.setAttribute('aria-current',n.id===selected?'page':'false');
+      const dot=document.createElement('span');dot.className='dot';dot.style.background=getColor(n);button.append(dot,document.createTextNode(n.title));
+      button.addEventListener('click',()=>selectNote(n.id,true));list.append(button);
+    }
+  }
+}
+function selectNote(id,focus=false){
+  const note=byId.get(id);if(!note)return;selected=id;
+  document.getElementById('reader-title').textContent=note.title;
+  const type=document.getElementById('reader-type');type.replaceChildren();const dot=document.createElement('span');dot.className='dot';dot.style.background=getColor(note);type.append(dot,document.createTextNode(note.domain+' · '+note.type));
+  renderText(note.text);const tags=document.getElementById('tags');tags.replaceChildren();
+  for(const name of note.tags){const el=document.createElement('span');el.className='tag';el.textContent='#'+name;tags.append(el);}
+  const related=document.getElementById('related');related.replaceChildren();
+  const neighbors=new Set(note.links);for(const n of DATA.notes)if(n.links.includes(id))neighbors.add(n.id);
+  for(const relatedId of neighbors){const other=byId.get(relatedId);if(!other)continue;const button=document.createElement('button');button.type='button';button.className='related-item';button.textContent=other.title;button.addEventListener('click',()=>selectNote(other.id,true));related.append(button);}
+  document.querySelector('.reader').scrollTop=0;renderList();
+  if(focus&&nodeById.has(id)){
+    const n=nodeById.get(id);setAutoRotate(false);hover=null;scale=Math.min(scale,1.2);
+    if(n.x||n.y||n.z){yaw=Math.atan2(-n.x,n.z)+.4;pitch=Math.atan2(n.y,Math.hypot(n.x,n.z))-.2;}
+  }
+  draw();
+}
+function fit(){
+  if(!width||!height)return;
+  contentTop=matchMedia('(max-width:820px)').matches?150:130;const bottom=76;
+  radius=Math.max(35,Math.min((width-64)/2,(height-contentTop-bottom)/2)*.9);
+  center={x:width/2,y:(contentTop+height-bottom)/2};scale=1;draw();
+}
+function rotate(x,y,z){
+  const rx=x*Math.cos(yaw)+z*Math.sin(yaw),rz=z*Math.cos(yaw)-x*Math.sin(yaw);
+  return{x:rx,y:y*Math.cos(pitch)-rz*Math.sin(pitch),z:y*Math.sin(pitch)+rz*Math.cos(pitch)};
+}
+function project(point){
+  const perspective=4/(4-point.z);
+  return{x:center.x+point.x*radius*scale*perspective,y:center.y+point.y*radius*scale*perspective,z:point.z,perspective};
+}
+function drawSphere(accent){
+  const size=radius*scale*4/Math.sqrt(15);
+  const glow=ctx.createRadialGradient(center.x-size*.28,center.y-size*.35,size*.04,center.x,center.y,size);
+  glow.addColorStop(0,accent);glow.addColorStop(1,'transparent');
+  ctx.fillStyle=glow;ctx.globalAlpha=.09;ctx.beginPath();ctx.arc(center.x,center.y,size,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle=accent;ctx.globalAlpha=.13;ctx.lineWidth=1;ctx.stroke();
+  const rings=[];
+  for(const latitude of [-Math.PI/3,-Math.PI/6,0,Math.PI/6,Math.PI/3]){
+    rings.push(t=>({x:Math.cos(latitude)*Math.cos(t),y:Math.sin(latitude),z:Math.cos(latitude)*Math.sin(t)}));
+  }
+  for(let i=0;i<4;i++){
+    const longitude=i*Math.PI/4;
+    rings.push(t=>({x:Math.cos(t)*Math.cos(longitude),y:Math.sin(t),z:Math.cos(t)*Math.sin(longitude)}));
+  }
+  for(const front of [false,true]){
+    ctx.globalAlpha=front?.11:.035;ctx.beginPath();
+    for(const ring of rings){
+      const start=ring(0);let previous=project(rotate(start.x,start.y,start.z));
+      for(let i=1;i<=80;i++){
+        const p=ring(i/80*Math.PI*2),next=project(rotate(p.x,p.y,p.z));
+        if((next.z+previous.z>=0)===front){ctx.moveTo(previous.x,previous.y);ctx.lineTo(next.x,next.y);}
+        previous=next;
+      }
+    }
+    ctx.stroke();
+  }
+}
+function draw(){
+  if(!width||!height)return;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,width,height);
+  const style=getComputedStyle(document.documentElement),foreground=style.getPropertyValue('--text').trim(),neutral=style.getPropertyValue('--muted').trim(),accent=style.getPropertyValue('--accent').trim(),background=style.getPropertyValue('--bg').trim(),focus=hover||selected;
+  const palette=Object.fromEntries([...new Set([...Object.values(colors),...Object.values(domainColors)])].map(color=>[color,style.getPropertyValue(color).trim()]));
+  drawSphere(accent);
+  for(const n of nodes){
+    const p=project(rotate(n.x,n.y,n.z));
+    n.sx=p.x;n.sy=p.y;n.depth=(p.z+1)/2;n.rz=p.z;n.sr=n.radius*p.perspective*Math.pow(scale,.25);
+  }
+  for(const edge of edges){
+    const a=edge.source,b=edge.target,active=a.id===focus||b.id===focus,depth=(a.depth+b.depth)/2,match=!query||matches(a)||matches(b);
+    ctx.strokeStyle=active?accent:neutral;ctx.globalAlpha=(active?.12+depth*.32:.025+depth*.1)*(match?1:.15);ctx.lineWidth=active?1.05:.7;
+    ctx.beginPath();ctx.moveTo(a.sx,a.sy);ctx.lineTo(b.sx,b.sy);ctx.stroke();
+  }
+  for(const n of [...nodes].sort((a,b)=>a.rz-b.rz)){
+    const active=n.id===focus||adjacency.get(focus)?.has(n.id),match=matches(n);
+    ctx.globalAlpha=(.24+n.depth*.76)*(match?1:.1)*(active?1:.8);ctx.fillStyle=palette[colorKey(n)]||neutral;
+    ctx.beginPath();ctx.arc(n.sx,n.sy,n.sr,0,Math.PI*2);ctx.fill();
+    if(n.id===selected){ctx.strokeStyle=palette[colorKey(n)]||accent;ctx.lineWidth=1.2;ctx.globalAlpha=.72;ctx.beginPath();ctx.arc(n.sx,n.sy,n.sr+4,0,Math.PI*2);ctx.stroke();}
+  }
+  const occupied=[];
+  const priority=n=>(n.id===focus?100:0)+(matches(n)&&query?30:0)+n.depth*8+Math.sqrt(adjacency.get(n.id).size);
+  const ordered=[...nodes].sort((a,b)=>priority(b)-priority(a));
+  for(const n of ordered){
+    if(!matches(n))continue;
+    ctx.font=(n.depth>.6||n.id===focus?'12':'11')+'px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif';
+    const x=n.sx,y=n.sy,tw=ctx.measureText(n.title).width;
+    const positions=[[x+n.sr+7,y+4],[x-tw/2,y-n.sr-8],[x-tw-n.sr-7,y+4],[x-tw/2,y+n.sr+17]];
+    let chosen=null;
+    for(const [tx,ty] of positions){const box={x:tx-3,y:ty-12,w:tw+6,h:17};if(box.x<5||box.x+box.w>width-5||box.y<contentTop||box.y+box.h>height-65)continue;if(!occupied.some(b=>box.x<b.x+b.w&&box.x+box.w>b.x&&box.y<b.y+b.h&&box.y+box.h>b.y)){chosen=[tx,ty,box];break;}}
+    if(!chosen)continue;occupied.push(chosen[2]);
+    ctx.globalAlpha=n.id===focus?1:.28+n.depth*.65;ctx.strokeStyle=background;ctx.lineWidth=3;ctx.lineJoin='round';ctx.strokeText(n.title,chosen[0],chosen[1]);ctx.fillStyle=foreground;ctx.fillText(n.title,chosen[0],chosen[1]);
+  }
+  ctx.globalAlpha=1;
+}
+function tick(){
+  raf=0;if(!autoRotate||inside||pointer||document.hidden){lastFrame=0;return;}
+  const now=performance.now(),elapsed=Math.min(50,lastFrame?now-lastFrame:16);lastFrame=now;yaw+=elapsed*.000065;draw();raf=requestAnimationFrame(tick);
+}
+function wake(){if(autoRotate&&!inside&&!pointer&&!document.hidden&&!raf){lastFrame=0;raf=requestAnimationFrame(tick);}}
+function setAutoRotate(value){
+  autoRotate=value;const button=document.getElementById('auto-rotate'),label=value?'暂停自动旋转':'开始自动旋转';
+  button.setAttribute('aria-pressed',String(value));button.setAttribute('aria-label',label);button.title=label;button.textContent=value?'Ⅱ':'▷';
+  if(!value&&raf){cancelAnimationFrame(raf);raf=0;lastFrame=0;}else wake();
+}
+function point(event){const rect=canvas.getBoundingClientRect();return{x:event.clientX-rect.left,y:event.clientY-rect.top};}
+function hit(p){return [...nodes].sort((a,b)=>b.rz-a.rz).find(n=>Math.hypot(p.x-n.sx,p.y-n.sy)<Math.max(12,n.sr+5))||null;}
+canvas.addEventListener('pointerdown',event=>{
+  if(pointer)return;const p=point(event);setAutoRotate(false);pointer={...p,startX:p.x,startY:p.y,node:hit(p),moved:false,id:event.pointerId};canvas.setPointerCapture(event.pointerId);
+});
+canvas.addEventListener('pointermove',event=>{
+  const p=point(event);
+  if(pointer&&event.pointerId===pointer.id){
+    pointer.moved ||=Math.hypot(p.x-pointer.startX,p.y-pointer.startY)>4;
+    if(pointer.moved){yaw+=(p.x-pointer.x)*.006;pitch-=(p.y-pointer.y)*.006;hover=null;}
+    pointer.x=p.x;pointer.y=p.y;draw();
+  }else if(!pointer){const n=hit(p);hover=n?.id||null;canvas.style.cursor=n?'pointer':'grab';draw();}
+});
+canvas.addEventListener('pointerup',event=>{
+  if(!pointer||event.pointerId!==pointer.id)return;const tapped=!pointer.moved?pointer.node:null;pointer=null;
+  if(canvas.hasPointerCapture(event.pointerId))canvas.releasePointerCapture(event.pointerId);
+  if(tapped)selectNote(tapped.id);wake();
+});
+canvas.addEventListener('pointercancel',event=>{if(pointer?.id===event.pointerId){pointer=null;hover=null;draw();wake();}});
+canvas.addEventListener('pointerenter',()=>{inside=true;});
+canvas.addEventListener('pointerleave',()=>{inside=false;if(!pointer){hover=null;draw();wake();}});
+function zoom(factor){scale=Math.max(.45,Math.min(2.6,scale*factor));draw();}
+function resetView(){yaw=-.38;pitch=.18;hover=null;fit();}
+canvas.addEventListener('wheel',event=>{event.preventDefault();zoom(Math.exp(-event.deltaY*.0013));},{passive:false});
+canvas.addEventListener('keydown',event=>{
+  if(['+','=','-','0',' ','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(event.key))event.preventDefault();
+  if(event.key==='+'||event.key==='=')zoom(1.2);if(event.key==='-')zoom(1/1.2);if(event.key==='0')resetView();if(event.key===' ')setAutoRotate(!autoRotate);
+  const delta={ArrowUp:[0,-.15],ArrowDown:[0,.15],ArrowLeft:[-.15,0],ArrowRight:[.15,0]}[event.key];
+  if(delta){setAutoRotate(false);yaw+=delta[0];pitch+=delta[1];hover=null;draw();}
+});
+document.getElementById('auto-rotate').addEventListener('click',()=>setAutoRotate(!autoRotate));
+document.getElementById('zoom-in').addEventListener('click',()=>zoom(1.2));
+document.getElementById('zoom-out').addEventListener('click',()=>zoom(1/1.2));
+document.getElementById('fit').addEventListener('click',resetView);
+search.addEventListener('input',()=>{query=search.value.trim().toLocaleLowerCase();setAutoRotate(false);renderList();draw();});
+const resize=new ResizeObserver(()=>{const rect=canvas.getBoundingClientRect();width=rect.width;height=rect.height;dpr=window.devicePixelRatio||1;canvas.width=Math.round(width*dpr);canvas.height=Math.round(height*dpr);fit();});
+resize.observe(canvas);
+matchMedia('(prefers-color-scheme: light)').addEventListener('change',()=>{document.querySelectorAll('.legend span').forEach((el,i)=>el.querySelector('.dot').style.background=getColor(legendTypes[i][0]));document.querySelector('#reader-type .dot').style.background=getColor(byId.get(selected));renderList();draw();});
+reducedMotion.addEventListener('change',event=>{if(event.matches)setAutoRotate(false);});
+document.addEventListener('visibilitychange',wake);
+selectNote(selected);setAutoRotate(autoRotate);
+}
+</script>
+</body>
+</html>

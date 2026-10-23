@@ -1,0 +1,16 @@
+{
+  "name": "mylife-core",
+  "version": "0.1.0",
+  "description": "Markdown personal archive rules and a local spherical knowledge graph, with fictional demo data.",
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "demo": "node scripts/build.mjs --demo",
+    "start": "node scripts/serve.mjs",
+    "test": "node --test",
+    "check:release": "node scripts/check-release.mjs"
+  },
+  "files": ["src/", "scripts/", "docs/", "templates/", "tests/", "examples/demo/", "mylife.config.json", "demo.html", "README.md", "AGENTS.md", "LICENSE"]
+}
